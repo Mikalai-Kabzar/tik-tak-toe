@@ -15,4 +15,9 @@ public class Driver {
 		}
 		return driver;
 	}
+
+	public static void killDriver() {
+		driver = null;
+	}
+
 }

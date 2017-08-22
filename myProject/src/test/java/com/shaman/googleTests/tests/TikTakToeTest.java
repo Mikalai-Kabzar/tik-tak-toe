@@ -6,6 +6,8 @@ import com.shaman.common.Services.NavigationService;
 import com.shaman.common.basetest.BaseTest;
 
 import googlePages.MainPage;
+import googlePages.tikTakToeGame.TikTakToeGamePage;
+import googlePages.tikTakToeGame.Gamers.Gamer;
 
 public class TikTakToeTest extends BaseTest {
 
@@ -14,14 +16,13 @@ public class TikTakToeTest extends BaseTest {
 
 		// WaitService.sleep(1000);
 		MainPage mainPage = NavigationService.getMainPage();
-
-		// TikTakToeGamePage tikTakToeGamePage = mainPage.goToTikTakToeGamePage();
-		// Gamer genius = tikTakToeGamePage.crateGeniusGamer();
-		// tikTakToeGamePage.setEasyComplexity();
-		// tikTakToeGamePage.setHardComplexity();
-		// tikTakToeGamePage.setMediumComplexity();
-		// tikTakToeGamePage.playGame(genius, 1);
-		// tikTakToeGamePage.printStat();
+		TikTakToeGamePage tikTakToeGamePage = mainPage.goToTikTakToeGamePage();
+		Gamer genius = tikTakToeGamePage.crateGeniusGamer();
+		tikTakToeGamePage.setEasyComplexity();
+		tikTakToeGamePage.setHardComplexity();
+		tikTakToeGamePage.setMediumComplexity();
+		tikTakToeGamePage.playGame(genius, 1);
+		tikTakToeGamePage.printStat();
 	}
 
 }

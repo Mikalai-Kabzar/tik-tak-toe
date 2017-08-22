@@ -8,4 +8,9 @@
 		</classes>
 	</test>
 	
+	<test name="Tik-Tak-Toe test-2">
+		<classes>
+			<class name="com.shaman.googleTests.tests.TikTakToeTest" />
+		</classes>
+	</test>	
 </suite>

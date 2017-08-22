@@ -53,7 +53,10 @@ public class DriverFactory {
 		} else {
 			ChromeDriverManager.getInstance().version(CHROME_VERSION).setup();
 		}
+		System.setProperty("webdriver.chrome.driver", WINDOWS_CHROME_DRIVER_PATH);
+
 		ChromeOptions options = new ChromeOptions();
+
 		options.setExperimentalOption("excludeSwitches", Arrays.asList("ignore-certificate-errors"));
 		options.addArguments("--disable-extensions");
 		options.addArguments("disable-infobars");
@@ -61,7 +64,9 @@ public class DriverFactory {
 		prefs.put("credentials_enable_service", false);
 		prefs.put("profile.password_manager_enabled", false);
 		options.setExperimentalOption("prefs", prefs);
+
 		driver = new ChromeDriver(options);
+
 		LOG.debug("Driver has been created");
 		return driver;
 	}

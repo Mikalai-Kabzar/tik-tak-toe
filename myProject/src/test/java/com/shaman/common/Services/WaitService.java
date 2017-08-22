@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -18,11 +17,9 @@ public class WaitService {
 	public static final int LONG_TIMEOUT_SECONDS = 30;
 	public static final int SMALL_POOLING_EVERY = PULLING_EVERY_MILLISECONDS / 4;
 
-	protected static WebDriver driver = Driver.getDriver();
-
 	public static boolean isElementExist(String locator) {
 		try {
-			driver.findElement(By.xpath(locator));
+			Driver.getDriver().findElement(By.xpath(locator));
 			return true;
 		} catch (NoSuchElementException e) {
 			return false;
@@ -30,28 +27,28 @@ public class WaitService {
 	}
 
 	public static void waitForElementExist(String locator) {
-		new WebDriverWait(driver, TIMEOUT_SECONDS).ignoring(NoSuchElementException.class)
+		new WebDriverWait(Driver.getDriver(), TIMEOUT_SECONDS).ignoring(NoSuchElementException.class)
 				.until(ExpectedConditions.presenceOfElementLocated(By.xpath(locator)));
 	}
 
 	public static WebElement findElement(String locator) {
-		return driver.findElement(By.xpath(locator));
+		return Driver.getDriver().findElement(By.xpath(locator));
 	}
 
 	public static WebElement findElement(By by) {
-		return driver.findElement(by);
+		return Driver.getDriver().findElement(by);
 	}
 
 	public static List<WebElement> findElements(By by) {
-		return driver.findElements(by);
+		return Driver.getDriver().findElements(by);
 	}
 
 	public static List<WebElement> findElements(String locator) {
-		return driver.findElements(By.xpath(locator));
+		return Driver.getDriver().findElements(By.xpath(locator));
 	}
 
 	public static void waitUntilElementToBeVisible(WebElement element) {
-		WebDriverWait wdwait = new WebDriverWait(driver, TIMEOUT_SECONDS);
+		WebDriverWait wdwait = new WebDriverWait(Driver.getDriver(), TIMEOUT_SECONDS);
 		wdwait.until(ExpectedConditions.visibilityOf(element));
 	}
 
@@ -60,17 +57,17 @@ public class WaitService {
 	}
 
 	public static void waitUntilElementToBeVisible(By locator) {
-		WebDriverWait wdwait = new WebDriverWait(driver, TIMEOUT_SECONDS);
+		WebDriverWait wdwait = new WebDriverWait(Driver.getDriver(), TIMEOUT_SECONDS);
 		wdwait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(locator));
 	}
 
 	public static void waitForElementToClickable(By locator) {
-		WebDriverWait wdwait = new WebDriverWait(driver, TIMEOUT_SECONDS);
+		WebDriverWait wdwait = new WebDriverWait(Driver.getDriver(), TIMEOUT_SECONDS);
 		wdwait.until(ExpectedConditions.elementToBeClickable(locator));
 	}
 
 	public static void waitForElementToClickable(WebElement element) {
-		WebDriverWait wdwait = new WebDriverWait(driver, TIMEOUT_SECONDS);
+		WebDriverWait wdwait = new WebDriverWait(Driver.getDriver(), TIMEOUT_SECONDS);
 		wdwait.until(ExpectedConditions.elementToBeClickable(element));
 	}
 

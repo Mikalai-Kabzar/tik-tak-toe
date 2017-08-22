@@ -3,7 +3,10 @@
 <suite name="Tik-Tak-Toe suite">
 	<test name="Tik-Tak-Toe test">
 		<classes>
-			<class name="com.shaman.googleTests.tests.TikTakToeTest" />
+			<class name="com.shaman.googleTests.tests.TikTakToeTest" />		
 		</classes>
 	</test>
+	
+	
+	
 </suite>

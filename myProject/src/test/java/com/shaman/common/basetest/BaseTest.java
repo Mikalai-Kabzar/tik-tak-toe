@@ -61,6 +61,7 @@ abstract public class BaseTest {
 	public void closeDriver() {
 		destroyDriver();
 		driver = null;
+		Driver.killDriver();
 	}
 
 	/**
