@@ -2,7 +2,6 @@ package com.shaman.googleTests.tests;
 
 import org.testng.annotations.Test;
 
-import com.shaman.common.Services.NavigationService;
 import com.shaman.common.basetest.BaseTest;
 
 import googlePages.MainPage;
@@ -15,7 +14,7 @@ public class TikTakToeTest extends BaseTest {
 	public void tikTakToeTest() {
 
 		// WaitService.sleep(1000);
-		MainPage mainPage = NavigationService.getMainPage();
+		MainPage mainPage = MainPage.getMainPage();
 		TikTakToeGamePage tikTakToeGamePage = mainPage.goToTikTakToeGamePage();
 		Gamer genius = tikTakToeGamePage.crateGeniusGamer();
 		tikTakToeGamePage.setEasyComplexity();

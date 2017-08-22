@@ -13,12 +13,25 @@ public class MainPage extends AbstractPage {
 	private static final By MAIN_INPUT_XPATH = By.xpath(".//*[@id='lst-ib']");
 
 	/**
+	 * Return main page instance
+	 * 
+	 * @return {@link MainPage} instance.
+	 */
+	public static MainPage getMainPage() {
+		MainPage mainPage = new MainPage();
+
+		LOG.debug("Wait for main page loading.");
+		mainPage.waitForPageLoading();
+		return mainPage;
+	}
+
+	/**
 	 * Look for some game by request.
 	 * 
 	 * @return {@link MainPage} instance.
 	 */
 	public MainPage lookFor(String request) {
-		LOG.info("Look for game bt request '" + request + "'.");
+		LOG.info("Look for game by request '" + request + "'.");
 
 		LOG.debug("Look for input.");
 		WebElement mainInput = WaitService.findElement(MAIN_INPUT_XPATH);
@@ -40,7 +53,7 @@ public class MainPage extends AbstractPage {
 	 * @return {@link TikTakToeGamePage} instance.
 	 */
 	public TikTakToeGamePage goToTikTakToeGamePage() {
-
+		LOG.info("Look for game by request '" + TikTakToeGamePage.GAME_REQUEST + "'.");
 		lookFor(TikTakToeGamePage.GAME_REQUEST);
 		return new TikTakToeGamePage();
 
@@ -50,5 +63,4 @@ public class MainPage extends AbstractPage {
 	public void waitForPageLoading() {
 		WaitService.waitUntilElementToBeVisible(MAIN_INPUT_XPATH);
 	};
-
 }

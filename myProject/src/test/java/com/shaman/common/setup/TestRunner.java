@@ -58,5 +58,4 @@ public class TestRunner {
 		String durationAsString = DateTimeFormatter.ofPattern("H:mm:ss").format(LocalTime.MIDNIGHT.plus(duration));
 		LOG.info("Execution time is: " + durationAsString);
 	}
-
 }

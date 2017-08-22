@@ -24,28 +24,6 @@ public class CustomLogger {
 		return customLogger;
 	}
 
-	// /**
-	// * Method returns root Logger instance
-	// *
-	// * @return Logger
-	// */
-	// public static Logger getRootLogger() {
-	// return Logger.getRootLogger();
-	// }
-
-	// /**
-	// * Method logs at ErStepror level with String.format
-	// *
-	// * @param formatPattern
-	// * String format pattern
-	// * @param args
-	// * format arguments
-	// */
-	// public void step(String formatPattern, Object... args) {
-	// String message = formatMessage(formatPattern, args);
-	// step(message);
-	// }
-
 	/**
 	 * Format message with dates
 	 * 
@@ -184,20 +162,11 @@ public class CustomLogger {
 	}
 
 	/**
-	 * Method returns original Logger instance
-	 *
-	 * @return Logger
-	 */
-	public Logger getOriginalLogger() {
-		return LOG;
-	}
-
-	/**
 	 * Method sends a message to the log according to Level value
 	 *
 	 * @return Logger
 	 */
-	private static synchronized void LogAtLevel(Level level, Object message) {
+	private static void LogAtLevel(Level level, Object message) {
 		LOG.log(CLASS_NAME, level, message, null);
 	}
 
