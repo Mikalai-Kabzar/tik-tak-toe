@@ -18,9 +18,8 @@ public class MainPage extends AbstractPage {
 	 * @return {@link MainPage} instance.
 	 */
 	public static MainPage getMainPage() {
+		LOG.debug("Get main page.");
 		MainPage mainPage = new MainPage();
-
-		LOG.debug("Wait for main page loading.");
 		mainPage.waitForPageLoading();
 		return mainPage;
 	}
@@ -61,6 +60,7 @@ public class MainPage extends AbstractPage {
 
 	@Override
 	public void waitForPageLoading() {
+		LOG.debug("Wait for main page loading.");
 		WaitService.waitUntilElementToBeVisible(MAIN_INPUT_XPATH);
 	};
 }

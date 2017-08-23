@@ -20,7 +20,7 @@ public class TikTakToeTest extends BaseTest {
 		tikTakToeGamePage.setEasyComplexity();
 		tikTakToeGamePage.setHardComplexity();
 		tikTakToeGamePage.setMediumComplexity();
-		tikTakToeGamePage.playGame(genius, 1);
+		tikTakToeGamePage.playGame(genius, 5);
 		tikTakToeGamePage.printStat();
 	}
 

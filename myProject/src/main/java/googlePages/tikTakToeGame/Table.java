@@ -66,6 +66,7 @@ public class Table extends AbstractPage {
 	 * @return true if game status = 'X' win.
 	 */
 	public boolean isXWin() {
+		LOG.debug("Check. Game ended with 'X' win.");
 		return isXMarkDisplayed() && !isOMarkDisaplyed();
 	}
 
@@ -75,6 +76,7 @@ public class Table extends AbstractPage {
 	 * @return true if game status = 'O' win.
 	 */
 	public boolean isOWin() {
+		LOG.debug("Check. Game ended with 'O' win.");
 		return !isXMarkDisplayed() && isOMarkDisaplyed();
 	}
 
@@ -84,6 +86,7 @@ public class Table extends AbstractPage {
 	 * @return true if game status = draw.
 	 */
 	public boolean isDraw() {
+		LOG.debug("Check. Game ended with Draw.");
 		return isXMarkDisplayed() && isOMarkDisaplyed();
 	}
 
@@ -93,12 +96,14 @@ public class Table extends AbstractPage {
 	 * @return array with cells values.
 	 */
 	public int[][] getTableValues() {
+		LOG.debug("Return array with actual cells values.");
 		updateTable();
 		return arrayWithSigns;
 	}
 
 	@Override
 	public void waitForPageLoading() {
+		LOG.debug("Wait for table loading.");
 		WaitService.waitUntilElementToBeVisible(MAIN_GAME_TABLE_XPATH);
 	};
 
@@ -111,7 +116,7 @@ public class Table extends AbstractPage {
 	 *            - y index of cell.
 	 */
 	public void clickOnCell(int i, int j) {
-		LOG.debug(String.format("Click on cell (%s, %s)", i, j));
+		LOG.info(String.format("Click on cell (%s, %s)", i, j));
 		WaitService.findElement(String.format(CELL_XPATH, i + 1, j + 1)).click();
 	}
 
@@ -119,6 +124,7 @@ public class Table extends AbstractPage {
 	 * Wait for sum of table update.
 	 */
 	public void waitForSumUpdate() {
+		LOG.debug("Wait for PC turn and update of table.");
 		int counter = 0;
 		while (getActualSum() == getSum() && counter < MAX_COUNT) {
 			WaitService.sleep(TIMEOUT);
@@ -133,13 +139,14 @@ public class Table extends AbstractPage {
 	 * @param mark
 	 *            - mark to find win-cell.
 	 * 
-	 * @return {@link CellCoordinate} of free corner cell.
+	 * @return {@link Cell} of free corner cell.
 	 */
-	public CellCoordinate getCellToWin(Marks mark) {
-		CellCoordinate cellCoordinate = null;
-		List<CellCoordinate> list = getAllFreeCells();
+	public Cell getCellToWin(Marks mark) {
+		LOG.debug("Get free cell to win as " + mark + ".");
+		Cell cellCoordinate = null;
+		List<Cell> list = getAllFreeCells();
 		int valueToCompare = getMarkValue(mark) * 2;
-		for (CellCoordinate cell : list) {
+		for (Cell cell : list) {
 			int x = cell.getX();
 			int y = cell.getY();
 			if (isCornerCell(x, y)) {
@@ -160,12 +167,13 @@ public class Table extends AbstractPage {
 	/**
 	 * Get free corner cell.
 	 * 
-	 * @return {@link CellCoordinate} of free corner cell.
+	 * @return {@link Cell} of free corner cell.
 	 */
-	public CellCoordinate getCornerCell() {
-		CellCoordinate cellCoordinate = null;
-		List<CellCoordinate> list = getAllFreeCells();
-		for (CellCoordinate cell : list) {
+	public Cell getCornerCell() {
+		LOG.debug("Get free corner cell.");
+		Cell cellCoordinate = null;
+		List<Cell> list = getAllFreeCells();
+		for (Cell cell : list) {
 			int x = cell.getX();
 			int y = cell.getY();
 			if (isCornerCell(x, y)) {
@@ -179,26 +187,39 @@ public class Table extends AbstractPage {
 	/**
 	 * Return list of cellCoordinates for all free cells.
 	 * 
-	 * @return {@link List} of {@link CellCoordinate} with all free cells.
+	 * @return {@link List} of {@link Cell} with all free cells.
 	 */
-	public List<CellCoordinate> getAllFreeCells() {
+	public List<Cell> getAllFreeCells() {
+		LOG.debug("Return list of cellCoordinates for all free cells.");
 		updateTable();
-		List<CellCoordinate> list = new ArrayList<CellCoordinate>();
+		List<Cell> list = new ArrayList<Cell>();
 		for (int i = 0; i < TABLE_SIZE; i++) {
 			for (int j = 0; j < TABLE_SIZE; j++) {
 				if (arrayWithSigns[i][j] == EMPTY_CELL_VALUE) {
-					list.add(new CellCoordinate(i, j));
+					list.add(new Cell(i, j));
 				}
 			}
 		}
 		return list;
 	}
 
+	/**
+	 * Check. X-win mark displayed.
+	 * 
+	 * @return true - if X-win mark displayed.
+	 */
 	private boolean isXMarkDisplayed() {
+		LOG.debug("Check. X-win mark displayed.");
 		return WaitService.isElementExist(String.format(WIN_LOSE_DRAW_XPATH, MARK_X));
 	}
 
+	/**
+	 * Check. O-win mark displayed.
+	 * 
+	 * @return true - if O-win mark displayed.
+	 */
 	private boolean isOMarkDisaplyed() {
+		LOG.debug("Check. O-win mark displayed.");
 		return WaitService.isElementExist(String.format(WIN_LOSE_DRAW_XPATH, MARK_O));
 	}
 
@@ -211,6 +232,7 @@ public class Table extends AbstractPage {
 	 * @return value of mark.
 	 */
 	private int getMarkValue(Marks mark) {
+		LOG.debug("Return value of mark.");
 		switch (mark) {
 		case X_MARK:
 			return X_CELL_VALUE;
@@ -227,6 +249,7 @@ public class Table extends AbstractPage {
 	 * @return sum of all table cells.
 	 */
 	private int getActualSum() {
+		LOG.debug("Get actual sum of all table cells.");
 		int sum = 0;
 		updateTable();
 		for (int[] row : arrayWithSigns) {
@@ -248,6 +271,7 @@ public class Table extends AbstractPage {
 	 * @return true if cell = corner cell.
 	 */
 	private boolean isCornerCell(int x, int y) {
+		LOG.debug("Check. Cell = corner cell.");
 		if ((x == 0 && y == 0) || (x == 0 && y == TABLE_SIZE - 1) || (x == TABLE_SIZE - 1 && y == 0)
 				|| (x == TABLE_SIZE - 1 && y == TABLE_SIZE - 1)) {
 			return true;
@@ -267,6 +291,7 @@ public class Table extends AbstractPage {
 	 * @return sum of diagonal values.
 	 */
 	private int calculateDiagonal(int x, int y) {
+		LOG.debug("Calculate sum of diagonal values.");
 		int sum = arrayWithSigns[1][1];
 		if (x == 0 && y == 0) {
 			sum += arrayWithSigns[2][2];
@@ -292,6 +317,7 @@ public class Table extends AbstractPage {
 	 * @return sum of row values.
 	 */
 	private int calculateRow(int index) {
+		LOG.debug("Calculate sum of row values.");
 		int sum = 0;
 		for (int j = 0; j < TABLE_SIZE; j++) {
 			sum += arrayWithSigns[index][j];
@@ -308,6 +334,7 @@ public class Table extends AbstractPage {
 	 * @return sum of column values.
 	 */
 	private int calculateColumn(int index) {
+		LOG.debug("Calculate sum of column values.");
 		int sum = 0;
 		for (int i = 0; i < TABLE_SIZE; i++) {
 			sum += arrayWithSigns[i][index];
@@ -316,9 +343,10 @@ public class Table extends AbstractPage {
 	}
 
 	/**
-	 * Collect actual table state.
+	 * Collect actual table state to array.
 	 */
 	private void updateTable() {
+		LOG.debug("Collect actual table state to array.");
 		boolean isFirstVisible = false;
 		boolean isSecondVisible = false;
 		for (int i = 0; i < TABLE_SIZE; i++) {

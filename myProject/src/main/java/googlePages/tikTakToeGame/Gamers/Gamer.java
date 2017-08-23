@@ -4,7 +4,7 @@ import java.util.Random;
 
 import org.apache.log4j.Logger;
 
-import googlePages.tikTakToeGame.CellCoordinate;
+import googlePages.tikTakToeGame.Cell;
 import googlePages.tikTakToeGame.Table;
 import googlePages.tikTakToeGame.enums.Marks;
 
@@ -38,11 +38,20 @@ public abstract class Gamer {
 		}
 	}
 
-	protected abstract CellCoordinate selectCellCoordinate();
+	/**
+	 * Select next cell to perform next turn.
+	 * 
+	 * @return {@Link Cell} instance.
+	 */
+	protected abstract Cell selectCell();
 
+	/**
+	 * Perform next turn.
+	 */
 	public void doNextTurn() {
-		CellCoordinate cellCoordinate = selectCellCoordinate();
-		table.clickOnCell(cellCoordinate.getX(), cellCoordinate.getY());
+		LOG.debug("Perform next turn.");
+		Cell cell = selectCell();
+		table.clickOnCell(cell.getX(), cell.getY());
 		table.waitForSumUpdate();
 	}
 

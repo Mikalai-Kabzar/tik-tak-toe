@@ -62,6 +62,7 @@ public class TikTakToeGamePage extends AbstractPage {
 	 * @return {@link Doodle} instance.
 	 */
 	public Doodle crateDoodleGamer() {
+		LOG.info("Create 'Doodle' gamer.");
 		return new Doodle(table, Marks.X_MARK);
 	}
 
@@ -71,6 +72,7 @@ public class TikTakToeGamePage extends AbstractPage {
 	 * @return {@link Child} instance.
 	 */
 	public Child crateChildGamer() {
+		LOG.info("Create 'Child' gamer.");
 		return new Child(table, Marks.X_MARK);
 	}
 
@@ -80,6 +82,7 @@ public class TikTakToeGamePage extends AbstractPage {
 	 * @return {@link Genius} instance.
 	 */
 	public Genius crateGeniusGamer() {
+		LOG.info("Create 'Genius' gamer.");
 		return new Genius(table, Marks.X_MARK);
 	}
 
@@ -128,26 +131,6 @@ public class TikTakToeGamePage extends AbstractPage {
 	}
 
 	/**
-	 * Print actual table status to LOG. Additional debug method.
-	 * 
-	 * @return {@link TikTakToeGamePage} instance.
-	 */
-	@SuppressWarnings("unused")
-	private TikTakToeGamePage printActualStateToLOG() {
-		LOG.debug("Actual table status:");
-		int[][] actualArray = table.getTableValues();
-		String str = "\n";
-		for (int[] array : actualArray) {
-			for (int elem : array) {
-				str = str + elem + ".";
-			}
-			str = str + "\n";
-		}
-		LOG.debug(str);
-		return this;
-	}
-
-	/**
 	 * Start new game.
 	 * 
 	 * @return {@link TikTakToeGamePage} instance.
@@ -156,7 +139,7 @@ public class TikTakToeGamePage extends AbstractPage {
 		LOG.info("Click 'New game' button.");
 		WaitService.findElement(NEW_GAME_BUTTON_XPATH).click();
 
-		LOG.info("Wait for page with new game laoding.");
+		LOG.debug("Wait for page with new game loading.");
 		waitForPageLoading();
 		waitForStates(UNSELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE, SELECTED_STATE);
 		return this;
@@ -234,6 +217,26 @@ public class TikTakToeGamePage extends AbstractPage {
 	}
 
 	/**
+	 * Print actual table status to LOG. Additional debug method.
+	 * 
+	 * @return {@link TikTakToeGamePage} instance.
+	 */
+	@SuppressWarnings("unused")
+	private TikTakToeGamePage printActualStateToLOG() {
+		LOG.debug("Actual table status:");
+		int[][] actualArray = table.getTableValues();
+		String str = "\n";
+		for (int[] array : actualArray) {
+			for (int elem : array) {
+				str = str + elem + ".";
+			}
+			str = str + "\n";
+		}
+		LOG.debug(str);
+		return this;
+	}
+
+	/**
 	 * Print game number
 	 * 
 	 * @param gameNumber
@@ -286,6 +289,7 @@ public class TikTakToeGamePage extends AbstractPage {
 	 * @return true if game over.
 	 */
 	private boolean isGameOver() {
+		LOG.debug("Check. Game over status.");
 		return WaitService.isElementExist(String.format(TURN_SPAN_STATE_XPATH, X_STATE, UNSELECTED_STATE))
 				&& WaitService.isElementExist(String.format(TURN_SPAN_STATE_XPATH, O_STATE, UNSELECTED_STATE))
 				&& WaitService.isElementExist(String.format(TURN_SPAN_STATE_XPATH, END_GAME, SELECTED_STATE))
@@ -298,6 +302,7 @@ public class TikTakToeGamePage extends AbstractPage {
 	 * @return true if PVP mode is selected
 	 */
 	private boolean isPVPMode() {
+		LOG.debug("Check. PVP mode is selected.");
 		return WaitService.isElementExist(String.format(TURN_SPAN_STATE_XPATH, X_STATE, SELECTED_STATE))
 				&& WaitService.isElementExist(String.format(TURN_SPAN_STATE_XPATH, START_GAME_STATE, UNSELECTED_STATE));
 	}
@@ -356,8 +361,6 @@ public class TikTakToeGamePage extends AbstractPage {
 			waitForStates(UNSELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE, SELECTED_STATE);
 			break;
 		}
-
-		LOG.info("Selected game mode: " + complexity.toString());
 		return this;
 	}
 }

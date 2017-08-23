@@ -2,7 +2,7 @@ package googlePages.tikTakToeGame.Gamers;
 
 import java.util.List;
 
-import googlePages.tikTakToeGame.CellCoordinate;
+import googlePages.tikTakToeGame.Cell;
 import googlePages.tikTakToeGame.Table;
 import googlePages.tikTakToeGame.enums.Marks;
 
@@ -17,9 +17,10 @@ public final class Doodle extends Gamer {
 	}
 
 	@Override
-	protected CellCoordinate selectCellCoordinate() {
-		List<CellCoordinate> list = table.getAllFreeCells();
-		int cellCoordinateNumber = RANDOOM.nextInt(list.size());
-		return list.get(cellCoordinateNumber);
+	protected Cell selectCell() {
+		LOG.debug("Select randoom cell to perform turn.");
+		List<Cell> list = table.getAllFreeCells();
+		int cellNumber = RANDOOM.nextInt(list.size());
+		return list.get(cellNumber);
 	}
 }
