@@ -1,6 +1,6 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.epam.test</groupId>
+  <groupId>com.shaman.test</groupId>
   <artifactId>myProject</artifactId>
   <version>1.0</version>
   <name>myProject</name>
@@ -23,7 +23,7 @@
 		<chrome.mac.ver>2.29</chrome.mac.ver>
 		<ie32.exe.ver>3.3.0.0</ie32.exe.ver>
 		<ie64.exe.ver>3.3.0.0</ie64.exe.ver>
-		<driverVersion>3.4.0</driverVersion>
+		<driverVersion>3.5.2</driverVersion>
 	</properties>
 	
   	<dependencies>
@@ -131,7 +131,7 @@
 			<version>1.11</version>
 		</dependency>
 		
-				<dependency>
+  <dependency>
 			<groupId>io.github.bonigarcia</groupId>
 			<artifactId>webdrivermanager</artifactId>
 			<version>1.7.0</version>

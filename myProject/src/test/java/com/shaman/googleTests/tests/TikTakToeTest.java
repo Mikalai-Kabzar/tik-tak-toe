@@ -31,24 +31,20 @@ public class TikTakToeTest extends BaseTest {
 
 	@DataProvider
 	public Object[][] dataForTest() {
-		return new Object[][] { { doodle, Complexity.HARD, attempts, 0 },
-				{ genius, Complexity.EASY, attempts, attempts }, { child, Complexity.MEDIUM, attempts, 1 } };
-	}
+		return new Object[][] {
 
-	// @DataProvider
-	// public Object[][] dataForTest() {
-	// return new Object[][] { { doodle, Complexity.HARD, 0 } };
-	// }
+				{ doodle, Complexity.HARD, attempts, 0 },
+
+				{ genius, Complexity.EASY, attempts, attempts },
+
+				{ child, Complexity.MEDIUM, attempts, 1 }
+
+		};
+	}
 
 	@Test(dataProvider = "dataForTest")
 	public void tikTakToeTest(Gamer gamer, Complexity complexity, int numberOfGames, int minimumWins) {
-		// System.out.println("numberOfGames = " + attempts);
-		// System.out.println("list = " + list.toString());
-		// System.out.println("attempts = " + attempts);
-		tikTakToeGamePage.selectComplexity(complexity);
-		tikTakToeGamePage.newGame();
-		tikTakToeGamePage.playGame(gamer, numberOfGames);
-		tikTakToeGamePage.printStat();
+		tikTakToeGamePage.selectComplexity(complexity).newGame().playGame(gamer, numberOfGames);
 		int actualWinsX = TikTakToeGamePage.getWinsX();
 		Assert.assertTrue(actualWinsX >= minimumWins,
 				"Actual wins 'X' count '" + actualWinsX + "' less than expected '" + minimumWins + "'.");

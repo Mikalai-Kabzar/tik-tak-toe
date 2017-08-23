@@ -98,7 +98,6 @@ abstract public class BaseTest {
 	/**
 	 * Read .yaml file and set variables to test class fields.
 	 */
-
 	private void readYaml() {
 		YamlReader reader = null;
 		Object object = null;
@@ -107,50 +106,64 @@ abstract public class BaseTest {
 		try {
 			reader = new YamlReader(new FileReader(this.getClass().getResource(".").getPath() + className + ".yaml"));
 		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			LOG.warn("There is no '.yaml' file in project.");
 		}
-
-		try {
-			object = reader.read();
-		} catch (YamlException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		HashMap<String, Object> map = (HashMap<String, Object>) object;
-		StringBuilder fieldNames = new StringBuilder();
-		for (Field field : this.getClass().getDeclaredFields()) {
-			fieldNames.append(field.getName()).append("||");
-		}
-		map.forEach((key, value) -> {
-			boolean isAcessiable = true;
-			Field field = null;
+		if (reader != null) {
 			try {
-				if (fieldNames.indexOf(key) != -1) {
+				object = reader.read();
+			} catch (YamlException e) {
+				e.printStackTrace();
+				throw new RuntimeException("Error during reading '.yaml' file");
+			}
+
+			@SuppressWarnings("unchecked")
+			HashMap<String, Object> map = (HashMap<String, Object>) object;
+			map.forEach((key, value) -> {
+				boolean isAcessiable = true;
+				Field field = null;
+				try {
 					field = this.getClass().getDeclaredField(key);
 					isAcessiable = field.isAccessible();
 					if (!isAcessiable) {
 						field.setAccessible(true);
 					}
+					String stringValue = value.toString();
 					switch (field.getGenericType().toString()) {
 					case "int":
-						field.setInt(this, Integer.parseInt(value.toString()));
+						field.setInt(this, Integer.parseInt(stringValue));
 						break;
-
+					case "boolean":
+						field.setBoolean(this, Boolean.parseBoolean(stringValue));
+						break;
+					case "float":
+						field.setFloat(this, Float.parseFloat(stringValue));
+						break;
+					case "byte":
+						field.setByte(this, Byte.parseByte(stringValue));
+						break;
+					case "short":
+						field.setShort(this, Short.parseShort(stringValue));
+						break;
+					case "long":
+						field.setLong(this, Long.parseLong(stringValue));
+						break;
+					case "double":
+						field.setDouble(this, Double.parseDouble(stringValue));
+						break;
 					default:
 						field.set(this, value);
 					}
+				} catch (SecurityException | IllegalArgumentException | IllegalAccessException
+						| NoSuchFieldException e2) {
+					e2.printStackTrace();
+					throw new RuntimeException(
+							"Error during setting values from '.yaml' file to test class variables.");
+				} finally {
+					if (!isAcessiable) {
+						field.setAccessible(false);
+					}
 				}
-
-			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e2) {
-				// TODO Auto-generated catch block
-				e2.printStackTrace();
-			} finally {
-				if (!isAcessiable) {
-					field.setAccessible(false);
-				}
-			}
-		});
+			});
+		}
 	}
 }

@@ -27,8 +27,8 @@ public class DriverFactory {
 	private static final String IE64_VERSION = System.getProperty("ie64.exe.ver");
 	private static final String IE_VERSION = System.getProperty("ie32.exe.ver");
 
-	private static final String WINDOWS_CHROME_DRIVER_PATH = System.getProperty("user.home")
-			+ "/.m2/repository/drivers/chromedriver/2.29/chromedriver-" + CHROME_VERSION + ".exe";
+	private static final String WINDOWS_CHROME_DRIVER_PATH = new java.io.File("").getAbsolutePath()
+			+ "src/test/resources/drivers/chromedriver.exe";
 
 	private static final String WINDOWS_IE_DRIVER_PATH = System.getProperty("user.home")
 			+ "/.m2/repository/drivers/iedriverserver32/" + IE_VERSION + "/iedriverserver32-" + IE_VERSION + ".exe";
@@ -129,8 +129,9 @@ public class DriverFactory {
 	/**
 	 * Get URL from String
 	 * 
-	 * @param url
-	 * @return
+	 * @param string
+	 *            with url
+	 * @return {@Link URL} instance
 	 */
 	protected static URL getUrlFromString(String url) {
 		URL remoteAddress;
@@ -141,5 +142,4 @@ public class DriverFactory {
 		}
 		return remoteAddress;
 	}
-
 }
