@@ -1,5 +1,9 @@
 package com.shaman.common.basetest;
 
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.lang.reflect.Field;
+import java.util.HashMap;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.log4j.Logger;
@@ -7,6 +11,8 @@ import org.openqa.selenium.WebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
 
+import com.esotericsoftware.yamlbeans.YamlException;
+import com.esotericsoftware.yamlbeans.YamlReader;
 import com.shaman.common.driver.Driver;
 import com.shaman.common.setup.Config;
 
@@ -24,6 +30,7 @@ abstract public class BaseTest {
 	@BeforeClass
 	public void setDriver() {
 		setupDriver();
+		readYaml();
 	}
 
 	/**
@@ -86,5 +93,64 @@ abstract public class BaseTest {
 	public void getLoginUrl() {
 		String loginUrl = Config.getInstance().getStartPage();
 		driver().get(loginUrl);
+	}
+
+	/**
+	 * Read .yaml file and set variables to test class fields.
+	 */
+
+	private void readYaml() {
+		YamlReader reader = null;
+		Object object = null;
+		String[] classNamePath = this.getClass().getName().split("\\.");
+		String className = classNamePath[classNamePath.length - 1];
+		try {
+			reader = new YamlReader(new FileReader(this.getClass().getResource(".").getPath() + className + ".yaml"));
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		try {
+			object = reader.read();
+		} catch (YamlException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+		HashMap<String, Object> map = (HashMap<String, Object>) object;
+		StringBuilder fieldNames = new StringBuilder();
+		for (Field field : this.getClass().getDeclaredFields()) {
+			fieldNames.append(field.getName()).append("||");
+		}
+		map.forEach((key, value) -> {
+			boolean isAcessiable = true;
+			Field field = null;
+			try {
+				if (fieldNames.indexOf(key) != -1) {
+					field = this.getClass().getDeclaredField(key);
+					isAcessiable = field.isAccessible();
+					if (!isAcessiable) {
+						field.setAccessible(true);
+					}
+					switch (field.getGenericType().toString()) {
+					case "int":
+						field.setInt(this, Integer.parseInt(value.toString()));
+						break;
+
+					default:
+						field.set(this, value);
+					}
+				}
+
+			} catch (NoSuchFieldException | SecurityException | IllegalArgumentException | IllegalAccessException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			} finally {
+				if (!isAcessiable) {
+					field.setAccessible(false);
+				}
+			}
+		});
 	}
 }

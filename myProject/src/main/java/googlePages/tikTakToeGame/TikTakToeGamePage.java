@@ -56,6 +56,18 @@ public class TikTakToeGamePage extends AbstractPage {
 		WaitService.waitForElementExist(NEW_GAME_BUTTON_XPATH);
 	};
 
+	public static int getWinsX() {
+		return winsX;
+	}
+
+	public static int getWinsO() {
+		return winsO;
+	}
+
+	public static int getDraws() {
+		return draws;
+	}
+
 	/**
 	 * Create 'Doodle' gamer.
 	 * 
@@ -217,6 +229,41 @@ public class TikTakToeGamePage extends AbstractPage {
 	}
 
 	/**
+	 * Select game complexity
+	 * 
+	 * @param complexity
+	 *            - complexity of game
+	 * 
+	 * @return {@link TikTakToeGamePage} instance
+	 * 
+	 */
+	public TikTakToeGamePage selectComplexity(Complexity complexity) {
+		LOG.debug("Click on complexity dropDown.");
+		WaitService.findElement(COMPLEXITY_DROPDOWN_XPATH).click();
+
+		LOG.debug("Wait for expand of complexity dropDown.");
+		WaitService.waitUntilElementToBeVisible(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString()));
+
+		LOG.debug("Click on complexity dropDown option to select complexity.");
+		WaitService.findElement(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString())).click();
+
+		if (WaitService.isElementExist(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString()))) {
+			newGame();
+		}
+
+		LOG.debug("Wait for selection of complexity option.");
+		switch (complexity) {
+		case PVP:
+			waitForStates(SELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE);
+			break;
+		default:
+			waitForStates(UNSELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE, SELECTED_STATE);
+			break;
+		}
+		return this;
+	}
+
+	/**
 	 * Print actual table status to LOG. Additional debug method.
 	 * 
 	 * @return {@link TikTakToeGamePage} instance.
@@ -331,36 +378,5 @@ public class TikTakToeGamePage extends AbstractPage {
 
 		LOG.debug("Wait for 'Start game' status.");
 		WaitService.waitForElementExist(String.format(TURN_SPAN_STATE_XPATH, START_GAME_STATE, stateStartGame));
-	}
-
-	/**
-	 * Select game complexity
-	 * 
-	 * @param complexity
-	 *            - complexity of game
-	 * 
-	 * @return {@link TikTakToeGamePage} instance
-	 * 
-	 */
-	private TikTakToeGamePage selectComplexity(Complexity complexity) {
-		LOG.debug("Click on complexity dropDown.");
-		WaitService.findElement(COMPLEXITY_DROPDOWN_XPATH).click();
-
-		LOG.debug("Wait for expand of complexity dropDown.");
-		WaitService.waitUntilElementToBeVisible(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString()));
-
-		LOG.debug("Click on complexity dropDown option to select complexity.");
-		WaitService.findElement(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString())).click();
-
-		LOG.debug("Wait for selection of complexity option.");
-		switch (complexity) {
-		case PVP:
-			waitForStates(SELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE);
-			break;
-		default:
-			waitForStates(UNSELECTED_STATE, UNSELECTED_STATE, UNSELECTED_STATE, SELECTED_STATE);
-			break;
-		}
-		return this;
 	}
 }
