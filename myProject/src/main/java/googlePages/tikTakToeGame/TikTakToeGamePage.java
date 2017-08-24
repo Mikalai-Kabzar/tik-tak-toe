@@ -304,6 +304,7 @@ public class TikTakToeGamePage extends AbstractPage {
 	private void playGame(Gamer gamer) {
 		LOG.info("Start playing.");
 		int turn = 0;
+		table.fillTableWithDefaultValues();
 		while (turn < MAX_TURNS && !isGameOver()) {
 			gamer.doNextTurn();
 			turn++;

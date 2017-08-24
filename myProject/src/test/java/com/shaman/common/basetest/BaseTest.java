@@ -46,7 +46,7 @@ abstract public class BaseTest {
 	 * @return {@link WebDriver}
 	 */
 	public WebDriver createDriver() {
-		// WebDriver driver = DriverFactory.getDriver(DriverType.CHROME);
+		// WebDriver driver = DriverFactory.getDriver(DriverType.IEXPLORER);
 		WebDriver driver = Driver.getDriver();
 		driver.manage().timeouts().implicitlyWait(Config.getInstance().getImplicityTimeOut(), TimeUnit.MILLISECONDS);
 		driver.manage().window().maximize();

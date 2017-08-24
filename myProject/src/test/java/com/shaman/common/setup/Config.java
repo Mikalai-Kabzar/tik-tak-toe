@@ -1,14 +1,12 @@
 package com.shaman.common.setup;
 
-import java.io.FileInputStream;
-import java.util.Properties;
-
 import com.shaman.common.reporter.CustomLogger;
 
+import ru.yandex.qatools.properties.PropertyLoader;
 import ru.yandex.qatools.properties.annotations.Property;
 import ru.yandex.qatools.properties.annotations.Resource;
 
-@Resource.Classpath("/src/test/resources/test.properties")
+@Resource.Classpath("test.properties")
 public class Config {
 
 	private static final CustomLogger LOG = CustomLogger.getLogger(Config.class);
@@ -25,17 +23,11 @@ public class Config {
 	@Property("startPage")
 	private String startPage;
 
+	@Property("browser")
+	private String browser;
+
 	public String getStartPage() {
-		String host;
-		FileInputStream fis;
-		Properties property = new Properties();
-		try {
-			fis = new FileInputStream("src/test/resources/test.properties");
-			property.load(fis);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		host = "http://" + property.getProperty("startPage");
+		String host = "http://" + startPage;
 		return host;
 	}
 
@@ -43,7 +35,11 @@ public class Config {
 		return implicityTimeOut;
 	}
 
-	private static Config config;
+	private static Config config = null;
+
+	private Config() {
+		PropertyLoader.populate(this);
+	}
 
 	public static Config getInstance() {
 		if (config == null) {
@@ -60,9 +56,6 @@ public class Config {
 		LOG.info("isWebDriverManager is: " + isWebDriverManager);
 		return isWebDriverManager;
 	}
-
-	@Property("browser")
-	private String browser;
 
 	public String getBrowser() {
 		return browser;

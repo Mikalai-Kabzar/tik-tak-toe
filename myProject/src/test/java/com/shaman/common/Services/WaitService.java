@@ -2,6 +2,7 @@ package com.shaman.common.Services;
 
 import java.util.List;
 
+import org.apache.log4j.Logger;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebElement;
@@ -11,10 +12,13 @@ import org.openqa.selenium.support.ui.WebDriverWait;
 import com.shaman.common.driver.Driver;
 
 public class WaitService {
-	public static final int TIMEOUT_SECONDS = 10;
-	public static final int SMALL_TIMEOUT_MILLISECONDS = 2;
+
+	protected static final Logger LOG = Logger.getLogger(WaitService.class);
+
+	public static final int TIMEOUT_SECONDS = 30;
+	public static final int SMALL_TIMEOUT_MILLISECONDS = 200;
 	public static final int PULLING_EVERY_MILLISECONDS = 500;
-	public static final int LONG_TIMEOUT_SECONDS = 30;
+	public static final int LONG_TIMEOUT_SECONDS = 60;
 	public static final int SMALL_POOLING_EVERY = PULLING_EVERY_MILLISECONDS / 4;
 
 	public static boolean isElementExist(String locator) {

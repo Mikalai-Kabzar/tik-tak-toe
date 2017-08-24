@@ -37,7 +37,7 @@ public class TikTakToeTest extends BaseTest {
 
 				{ genius, Complexity.EASY, attempts, attempts },
 
-				{ child, Complexity.MEDIUM, attempts, 1 }
+				{ child, Complexity.MEDIUM, attempts, 0 }
 
 		};
 	}

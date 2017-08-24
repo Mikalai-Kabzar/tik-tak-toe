@@ -13,8 +13,6 @@
 		<threads.number>1</threads.number>
 		<!-- Default server address -->
 		<app.server>localhost</app.server>
-		<!-- Drivers version -->
-		<seleniumVersion>2.53.1</seleniumVersion>
 		<!-- Timestamp of build -->
 		<timestamp>${maven.build.timestamp}</timestamp>
 		<maven.build.timestamp.format>yyyy-MM-dd</maven.build.timestamp.format>
@@ -23,10 +21,11 @@
 		<chrome.mac.ver>2.29</chrome.mac.ver>
 		<ie32.exe.ver>3.3.0.0</ie32.exe.ver>
 		<ie64.exe.ver>3.3.0.0</ie64.exe.ver>
-		<driverVersion>3.5.2</driverVersion>
+		<driverVersion>3.4.0</driverVersion>
 	</properties>
 	
   	<dependencies>
+  	
 		<dependency>
 			<groupId>org.seleniumhq.selenium</groupId>
 			<artifactId>selenium-java</artifactId>
@@ -62,6 +61,9 @@
 			<artifactId>selenium-server</artifactId>
 			<version>${driverVersion}</version>
 		</dependency>
+		
+		
+		
   		<dependency>
 			<groupId>ru.yandex.qatools.htmlelements</groupId>
 			<artifactId>htmlelements-java</artifactId>

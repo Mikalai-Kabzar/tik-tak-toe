@@ -17,25 +17,35 @@ import com.shaman.common.reporter.CustomLogger;
 import com.shaman.common.setup.Config;
 
 import io.github.bonigarcia.wdm.ChromeDriverManager;
-import io.github.bonigarcia.wdm.InternetExplorerDriverManager;
 
 public class DriverFactory {
 
 	private static final CustomLogger LOG = CustomLogger.getLogger(DriverFactory.class);
 
+	private static final String DRIVERS_PATH = new java.io.File("").getAbsolutePath() + "/src/test/resources/drivers/";
+	private static final String CHROME_DRIVER_NAME = "chromedriver.exe";
+	private static final String IE_DRIVER_NAME = "IEDriverServer.exe";
+	private static final String FIREFOX_DRIVER_NAME = "geckodriver.exe";
+
 	private static final String CHROME_VERSION = "2.31";
 	private static final String IE64_VERSION = System.getProperty("ie64.exe.ver");
 	private static final String IE_VERSION = System.getProperty("ie32.exe.ver");
 
-	private static final String WINDOWS_CHROME_DRIVER_PATH = new java.io.File("").getAbsolutePath()
-			+ "src/test/resources/drivers/chromedriver.exe";
+	private static final String WINDOWS_CHROME_DRIVER_PATH = DRIVERS_PATH + CHROME_DRIVER_NAME;
+	private static final String WINDOWS_IE_DRIVER_PATH = DRIVERS_PATH + IE_DRIVER_NAME;
+	private static final String WINDOWS_FIREFOX_DRIVER_PATH = DRIVERS_PATH + FIREFOX_DRIVER_NAME;
 
-	private static final String WINDOWS_IE_DRIVER_PATH = System.getProperty("user.home")
-			+ "/.m2/repository/drivers/iedriverserver32/" + IE_VERSION + "/iedriverserver32-" + IE_VERSION + ".exe";
-
-	@SuppressWarnings("unused")
-	private static final String WINDOWS_IE64_DRIVER_PATH = System.getProperty("user.home")
-			+ "/.m2/repository/drivers/iedriverserver64/" + IE64_VERSION + "/iedriverserver64-" + IE64_VERSION + ".exe";
+	//
+	// private static final String WINDOWS_IE_DRIVER_PATH =
+	// System.getProperty("user.home")
+	// + "/.m2/repository/drivers/iedriverserver32/" + IE_VERSION +
+	// "/iedriverserver32-" + IE_VERSION + ".exe";
+	//
+	// @SuppressWarnings("unused")
+	// private static final String WINDOWS_IE64_DRIVER_PATH =
+	// System.getProperty("user.home")
+	// + "/.m2/repository/drivers/iedriverserver64/" + IE64_VERSION +
+	// "/iedriverserver64-" + IE64_VERSION + ".exe";
 
 	/**
 	 * Create driver.
@@ -44,7 +54,7 @@ public class DriverFactory {
 	 *            Type of driver.
 	 * @return Created WebDriver.
 	 */
-	public static WebDriver getDriver() {
+	public static WebDriver getDriver123456() {
 		WebDriver driver = null;
 		Config config = Config.getInstance();
 
@@ -81,30 +91,36 @@ public class DriverFactory {
 	public static WebDriver getDriver(DriverType driverType) {
 		WebDriver driver = null;
 		Config config = Config.getInstance();
+
 		switch (driverType) {
 		case FIREFOX:
+			// System.setProperty("webdriver.gecko.driver", WINDOWS_FIREFOX_DRIVER_PATH);
+			// DesiredCapabilities ffCapabilities = DesiredCapabilities.firefox();
+			// ffCapabilities.setCapability("marionette", true);
+			// driver = new FirefoxDriver(ffCapabilities);
+
+			System.setProperty("webdriver.gecko.driver", WINDOWS_FIREFOX_DRIVER_PATH);
+			// System.setProperty("webdriver.firefox.marionette",
+			// WINDOWS_FIREFOX_DRIVER_PATH);
+			// DesiredCapabilities ffCapabilities = DesiredCapabilities.firefox();
+			// ffCapabilities.setCapability("firefox_binary", "C:\\Program Files\\Mozilla
+			// Firefox\\firefox.exe");
+			// ffCapabilities.setCapability("marionette", true);
 			driver = new FirefoxDriver();
+			// driver = new MarionetteDriver();
+
 			break;
 		case IEXPLORER:
-			if (!config.isWebDriverManager()) {
-				LOG.debug("Setting system property webdriver.ie.driver = %s", WINDOWS_IE_DRIVER_PATH);
-				System.setProperty("webdriver.ie.driver", WINDOWS_IE_DRIVER_PATH);
-				LOG.debug("Property has been set");
-			} else {
-				LOG.debug("Setting driver properties via WebDriverManager");
-				InternetExplorerDriverManager.getInstance().version(IE_VERSION).setup();
-				LOG.debug("Property has been set");
-			}
 			LOG.debug("Setting capabilities");
-			DesiredCapabilities ieCapabilities = DesiredCapabilities.internetExplorer();
-			ieCapabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS,
-					false);
-			ieCapabilities.setCapability(InternetExplorerDriver.REQUIRE_WINDOW_FOCUS, config.isIERequireFocus());
-			LOG.debug("Gettting driver instance");
-			driver = new InternetExplorerDriver(ieCapabilities);
+			DesiredCapabilities capabilities = DesiredCapabilities.internetExplorer();
+			capabilities.setCapability(InternetExplorerDriver.INTRODUCE_FLAKINESS_BY_IGNORING_SECURITY_DOMAINS, true);
+			capabilities.setCapability(InternetExplorerDriver.IE_ENSURE_CLEAN_SESSION, true);
+			System.setProperty("webdriver.ie.driver", WINDOWS_IE_DRIVER_PATH);
+			LOG.debug("Getting driver instance");
+			driver = new InternetExplorerDriver(capabilities);
 			break;
 		case CHROME:
-		default:
+			// default:
 			if (!config.isWebDriverManager()) {
 				System.setProperty("webdriver.chrome.driver", WINDOWS_CHROME_DRIVER_PATH);
 			} else {

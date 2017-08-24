@@ -43,6 +43,7 @@ public enum DriverType {
 
 	public static DriverType valueOfString(String name) {
 		DriverType driverType = DriverType.CHROME;
+
 		if (name.equalsIgnoreCase("firefox")) {
 			driverType = DriverType.FIREFOX;
 		}

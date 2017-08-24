@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import org.openqa.selenium.By;
+
 import com.shaman.common.Services.WaitService;
 
 import googlePages.AbstractPage;
@@ -11,9 +13,9 @@ import googlePages.tikTakToeGame.enums.Marks;
 
 public class Table extends AbstractPage {
 
-	private static final byte MAX_COUNT = 20;
+	private static final byte MAX_COUNT = 50;
 
-	private static final int TIMEOUT = 500;
+	private static final int TIMEOUT = 250;
 	private static final int TABLE_SIZE = 3;
 	private static final int EMPTY_CELL_VALUE = 0;
 	private static final int X_CELL_VALUE = 1;
@@ -31,13 +33,10 @@ public class Table extends AbstractPage {
 
 	private int[][] arrayWithSigns = new int[TABLE_SIZE][TABLE_SIZE];
 
-	private int sum;
+	private int sum = 0;
 
 	{
-		LOG.debug("Fill array with start values.");
-		for (int[] row : arrayWithSigns) {
-			Arrays.fill(row, EMPTY_CELL_VALUE);
-		}
+		fillTableWithDefaultValues();
 	}
 
 	public static int getEmptyCellValue() {
@@ -97,7 +96,7 @@ public class Table extends AbstractPage {
 	 */
 	public int[][] getTableValues() {
 		LOG.debug("Return array with actual cells values.");
-		updateTable();
+		// updateTable();
 		return arrayWithSigns;
 	}
 
@@ -117,7 +116,9 @@ public class Table extends AbstractPage {
 	 */
 	public void clickOnCell(int i, int j) {
 		LOG.info(String.format("Click on cell (%s, %s)", i, j));
-		WaitService.findElement(String.format(CELL_XPATH, i + 1, j + 1)).click();
+		String cellXpath = String.format(CELL_XPATH, i + 1, j + 1);
+		WaitService.waitForElementToClickable(By.xpath(cellXpath));
+		WaitService.findElement(cellXpath).click();
 	}
 
 	/**
@@ -126,11 +127,15 @@ public class Table extends AbstractPage {
 	public void waitForSumUpdate() {
 		LOG.debug("Wait for PC turn and update of table.");
 		int counter = 0;
-		while (getActualSum() == getSum() && counter < MAX_COUNT) {
+		int actualSum = getActualSum();
+		while (actualSum == getSum() && counter < MAX_COUNT) {
+			LOG.info("getActualSum() = " + getActualSum());
+			LOG.info("getSum() = " + getSum());
 			WaitService.sleep(TIMEOUT);
 			counter++;
+			actualSum = getActualSum();
 		}
-		setSum(getActualSum());
+		setSum(actualSum);
 	}
 
 	/**
@@ -191,7 +196,6 @@ public class Table extends AbstractPage {
 	 */
 	public List<Cell> getAllFreeCells() {
 		LOG.debug("Return list of cellCoordinates for all free cells.");
-		updateTable();
 		List<Cell> list = new ArrayList<Cell>();
 		for (int i = 0; i < TABLE_SIZE; i++) {
 			for (int j = 0; j < TABLE_SIZE; j++) {
@@ -201,6 +205,17 @@ public class Table extends AbstractPage {
 			}
 		}
 		return list;
+	}
+
+	/**
+	 * Fill table with default values.
+	 */
+	public void fillTableWithDefaultValues() {
+		LOG.debug("Fill array with start values.");
+		for (int[] row : arrayWithSigns) {
+			Arrays.fill(row, EMPTY_CELL_VALUE);
+		}
+		setSum(0);
 	}
 
 	/**
@@ -346,7 +361,7 @@ public class Table extends AbstractPage {
 	 * Collect actual table state to array.
 	 */
 	private void updateTable() {
-		LOG.debug("Collect actual table state to array.");
+		LOG.info("Collect actual table state to array.");
 		boolean isFirstVisible = false;
 		boolean isSecondVisible = false;
 		for (int i = 0; i < TABLE_SIZE; i++) {
@@ -364,5 +379,6 @@ public class Table extends AbstractPage {
 				}
 			}
 		}
+		LOG.info("Data collect finished.");
 	}
 }
