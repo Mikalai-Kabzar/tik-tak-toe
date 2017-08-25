@@ -49,10 +49,9 @@ public abstract class Gamer {
 	 * Perform next turn.
 	 */
 	public void doNextTurn() {
-		LOG.debug("Perform next turn.");
+		LOG.info("Perform next turn.");
 		Cell cell = selectCell();
 		table.clickOnCell(cell.getX(), cell.getY());
-		table.waitForSumUpdate();
 	}
 
 	public String getGamerIntellect() {

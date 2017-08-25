@@ -1,13 +1,13 @@
 package googlePages;
 
-import org.apache.log4j.Logger;
 import org.openqa.selenium.WebDriver;
 
 import com.shaman.common.driver.Driver;
+import com.shaman.common.reporter.CustomLogger;
 
 abstract public class AbstractPage {
 
-	protected static final Logger LOG = Logger.getLogger(AbstractPage.class);
+	protected static final CustomLogger LOG = CustomLogger.getLogger(AbstractPage.class);
 
 	protected WebDriver driver = Driver.getDriver();
 

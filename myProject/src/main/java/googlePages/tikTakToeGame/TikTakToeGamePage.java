@@ -238,6 +238,8 @@ public class TikTakToeGamePage extends AbstractPage {
 	 * 
 	 */
 	public TikTakToeGamePage selectComplexity(Complexity complexity) {
+		LOG.info("Select game complexity '%s'.", complexity.toString());
+
 		LOG.debug("Click on complexity dropDown.");
 		WaitService.findElement(COMPLEXITY_DROPDOWN_XPATH).click();
 
@@ -246,10 +248,6 @@ public class TikTakToeGamePage extends AbstractPage {
 
 		LOG.debug("Click on complexity dropDown option to select complexity.");
 		WaitService.findElement(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString())).click();
-
-		if (WaitService.isElementExist(String.format(COMPLEXITY_OPTION_XPATH, complexity.toString()))) {
-			newGame();
-		}
 
 		LOG.debug("Wait for selection of complexity option.");
 		switch (complexity) {
@@ -308,6 +306,7 @@ public class TikTakToeGamePage extends AbstractPage {
 		while (turn < MAX_TURNS && !isGameOver()) {
 			gamer.doNextTurn();
 			turn++;
+			table.waitForSumUpdate();
 		}
 		LOG.info("Game Over.");
 		checkWhoWins();

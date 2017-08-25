@@ -5,6 +5,7 @@ import java.util.Arrays;
 import java.util.List;
 
 import org.openqa.selenium.By;
+import org.openqa.selenium.WebDriverException;
 
 import com.shaman.common.Services.WaitService;
 
@@ -23,6 +24,8 @@ public class Table extends AbstractPage {
 
 	private static final String MARK_X = "X";
 	private static final String MARK_O = "O";
+
+	private static final String GAME_OVER_CELL_BLOCKED_MESSAGE = "Other element would receive the click:";
 
 	private static final String MAIN_WEBELEMENT_XPATH = ".//div[@class='_Wtj mod']";
 	private static final String MAIN_GAME_TABLE_XPATH = MAIN_WEBELEMENT_XPATH + "//table[contains(@class,'i7i')]";
@@ -115,10 +118,19 @@ public class Table extends AbstractPage {
 	 *            - y index of cell.
 	 */
 	public void clickOnCell(int i, int j) {
-		LOG.info(String.format("Click on cell (%s, %s)", i, j));
+		LOG.info("Click on cell (%s, %s)", i, j);
 		String cellXpath = String.format(CELL_XPATH, i + 1, j + 1);
 		WaitService.waitForElementToClickable(By.xpath(cellXpath));
-		WaitService.findElement(cellXpath).click();
+		try {
+			WaitService.findElement(cellXpath).click();
+		} catch (WebDriverException e) {
+			if (e.getMessage().contains(GAME_OVER_CELL_BLOCKED_MESSAGE)) {
+				WaitService.sleep(TIMEOUT);
+				LOG.debug("End game. Cells blocked.");
+			} else {
+				throw e;
+			}
+		}
 	}
 
 	/**
@@ -129,8 +141,6 @@ public class Table extends AbstractPage {
 		int counter = 0;
 		int actualSum = getActualSum();
 		while (actualSum == getSum() && counter < MAX_COUNT) {
-			LOG.info("getActualSum() = " + getActualSum());
-			LOG.info("getSum() = " + getSum());
 			WaitService.sleep(TIMEOUT);
 			counter++;
 			actualSum = getActualSum();
@@ -196,6 +206,7 @@ public class Table extends AbstractPage {
 	 */
 	public List<Cell> getAllFreeCells() {
 		LOG.debug("Return list of cellCoordinates for all free cells.");
+		updateTable();
 		List<Cell> list = new ArrayList<Cell>();
 		for (int i = 0; i < TABLE_SIZE; i++) {
 			for (int j = 0; j < TABLE_SIZE; j++) {
@@ -361,7 +372,7 @@ public class Table extends AbstractPage {
 	 * Collect actual table state to array.
 	 */
 	private void updateTable() {
-		LOG.info("Collect actual table state to array.");
+		LOG.debug("Collect actual table state to array.");
 		boolean isFirstVisible = false;
 		boolean isSecondVisible = false;
 		for (int i = 0; i < TABLE_SIZE; i++) {
@@ -379,6 +390,6 @@ public class Table extends AbstractPage {
 				}
 			}
 		}
-		LOG.info("Data collect finished.");
+		LOG.debug("Data collect finished.");
 	}
 }
